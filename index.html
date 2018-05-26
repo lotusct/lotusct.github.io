@@ -118,58 +118,180 @@
         <div class="container">
             <div class="row">
                 <main class="col-md-8 main-content ">
-                    <div class="carousel">
-    <%- image_tag('img/head-img.jpg') %>
+                    <!--
+<div class="carousel">
+    <img src="/img/head-img.jpg">
 </div>
+-->
 
-<% if(page.posts && page.posts.length){ %>
-<% page.posts.forEach(function (post, i) { %>
-<%
-    var urls = pickImgs(post);
-    var random = Math.floor(Math.random() * (urls.length));
-    if(theme.defaultImgs && theme.defaultImgs.length >0){
-        var urls2 = theme.defaultImgs;
-        var random2 = Math.floor(Math.random() * (urls2.length));
-    }
-    var _photoUrl = post.img || (urls.length > 0 && urls[random]) || (urls2.length > 0 && urls2[random2]) || '';
-%>
+
+
 <article class="post">
-    <% if(_photoUrl) {%>
-        <div class="post-media">
-            <a href="javascript:">
-                <img class="img-ajax" src="<%- url_for('/img/loading.gif') %>"  data-src="<%- url_for(_photoUrl) %>"   alt="<%- post.title %>"> 
-            </a>
-        </div>
-    <% } %>
+    
     <div class="post-content">
         <div class="post-head home-post-head">
             <h1 class="post-title">
-                <a href="<%- url_for(post.path) %>"><%- post.title %></a>
+                <a href="/2018/05/26/RandomForest/">随机森林算法</a>
             </h1>
             <div class="post-meta">  &bull;
                 <time class="post-date" datetime="" title="">
-                    <%- date(post.date,"YYYY年MM月DD日") %>
+                    2018年05月26日
                 </time>
             </div>
         </div>
         <p class="brief">
-            <%- truncate(strip_html(post.content), {length: theme.excerptLength || 120, omission: '...'}) %>
+            一 理解随机森林是通过集成学习的思想将多多个决策树集成的算法，涉及到集成学习思想。可以从两个角度来理解：随机+森林。森林就是一颗颗树组成的，随机 则是特征维度值选择和每棵树的生成没有剪枝过程。
+二 概念随机森林看起来是很好理解，但是要...
         </p> 
     </div>
     <footer class="post-footer clearfix">
         <div class="pull-left tag-list">
-            <%- partial('_partial/article-meta', {post: post}) %>
+            <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>技术</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            随机森林、RandomForest
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/05/26</span>
+    </span>
+</div>
+
         </div>
 
         <div class="post-permalink"> 
-            <a href="<%- url_for(post.path) %>" class="btn btn-default">阅读全文</a>
+            <a href="/2018/05/26/RandomForest/" class="btn btn-default">阅读全文</a>
         </div>
     </footer>
 </article>
-<% }) %>
-<%}%>
 
-<%- partial('_partial/pagination') %>
+
+<article class="post">
+    
+    <div class="post-content">
+        <div class="post-head home-post-head">
+            <h1 class="post-title">
+                <a href="/2017/11/18/please-love/">若遇爱,请好好爱</a>
+            </h1>
+            <div class="post-meta">  &bull;
+                <time class="post-date" datetime="" title="">
+                    2017年11月18日
+                </time>
+            </div>
+        </div>
+        <p class="brief">
+            文 / 树儿我们都是尘世中一朵寂寞的烟火。与无涯的岁月里，透视着人间百态的繁复。也成全着生命中必然的遇见。也许，时光的两岸，唯有不辜负光阴，不违背心意，就是安稳与静好的妥帖。
+只一个转身，便已踏进冬的门楣。我从一卷遗落的风声里，看忘川...
+        </p> 
+    </div>
+    <footer class="post-footer clearfix">
+        <div class="pull-left tag-list">
+            <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>思想</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            若遇爱 好好爱
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2017/11/18</span>
+    </span>
+</div>
+
+        </div>
+
+        <div class="post-permalink"> 
+            <a href="/2017/11/18/please-love/" class="btn btn-default">阅读全文</a>
+        </div>
+    </footer>
+</article>
+
+
+<article class="post">
+    
+    <div class="post-content">
+        <div class="post-head home-post-head">
+            <h1 class="post-title">
+                <a href="/2017/05/07/Azkaban-3.0-install/">Azkaban3.0安装教程</a>
+            </h1>
+            <div class="post-meta">  &bull;
+                <time class="post-date" datetime="" title="">
+                    2017年05月07日
+                </time>
+            </div>
+        </div>
+        <p class="brief">
+            本次安装azkaban的版本3.20.0-5,相对版本2.5有部分变化，此次安装two-server模式。In version 3.0 we provide three modes: the stand alone “solo-ser...
+        </p> 
+    </div>
+    <footer class="post-footer clearfix">
+        <div class="pull-left tag-list">
+            <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>技术</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            Azkaban 大数据
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2017/05/07</span>
+    </span>
+</div>
+
+        </div>
+
+        <div class="post-permalink"> 
+            <a href="/2017/05/07/Azkaban-3.0-install/" class="btn btn-default">阅读全文</a>
+        </div>
+    </footer>
+</article>
+
+
+
+
+
+
+
                 </main>
                 
     <aside class="col-md-4 sidebar">
@@ -222,7 +344,7 @@
         
     <div class="widget">
         <h3 class="title">分类</h3>
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link current" href="/categories/思想/"><i class="fa" aria-hidden="true">思想</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/"><i class="fa" aria-hidden="true">技术</i></a><span class="category-list-count">2</span></li></ul>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/思想/"><i class="fa" aria-hidden="true">思想</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/"><i class="fa" aria-hidden="true">技术</i></a><span class="category-list-count">2</span></li></ul>
     </div>
 
 
@@ -293,11 +415,6 @@
     </div>
 </div>
 
-
-  <script src="/assets/highlight.pack.js?rev=@@hash"></script>
-  <script>
-     hljs.initHighlightingOnLoad(); //初始化代码高亮 
-  </script>
 
 
 
