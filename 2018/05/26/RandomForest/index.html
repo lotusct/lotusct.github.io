@@ -26,7 +26,7 @@
     <!--Title-->
 
 
-<title>归档 | 老树</title>
+<title>随机森林算法 | 老树</title>
 
 
     <link rel="alternate" href="/atom.xml" title="老树" type="application/atom+xml">
@@ -38,6 +38,8 @@
 
 
 
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css?rev=9.12.0">
 
 
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
@@ -117,33 +119,112 @@
     <section class="content-wrap">
         <div class="container">
             <div class="row">
-                <main class="col-md-8 main-content ">
-                    <div id="main">
-  <div id="post-list">
-    <ul class="archives-post-list">
-    	<h1 class="info">年 月</h1>
-        
-          <li class="post-items" _href="/2018/05/26/RandomForest/">
-            <h3 class="post-item-title">
-            	<a href="/2018/05/26/RandomForest/"> 随机森林算法 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2017/11/18/please-love/">
-            <h3 class="post-item-title">
-            	<a href="/2017/11/18/please-love/"> 若遇爱,请好好爱 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2017/05/07/Azkaban-3.0-install/">
-            <h3 class="post-item-title">
-            	<a href="/2017/05/07/Azkaban-3.0-install/"> Azkaban3.0安装教程 </a>
-            </h3>  
-          </li>
-        
-    </ul>
-  </div>
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="随机森林算法">
+            
+            随机森林算法
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>技术</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            随机森林、RandomForest
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/05/26</span>
+    </span>
 </div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <h1 id="一-理解"><a href="#一-理解" class="headerlink" title="一 理解"></a>一 理解</h1><p>随机森林是通过集成学习的思想将多多个决策树集成的算法，涉及到集成学习思想。可以从两个角度来理解：随机+森林。森林就是一颗颗树组成的，随机 则是特征维度值选择和每棵树的生成没有剪枝过程。</p>
+<h1 id="二-概念"><a href="#二-概念" class="headerlink" title="二 概念"></a>二 概念</h1><p>随机森林看起来是很好理解，但是要完全搞明白它的工作原理，需要很多机器学习方面相关的基础知识。在本文中，我们简单谈一下，而不逐一进行赘述，如果有同学不太了解相关的知识，可以参阅其他博友的一些相关博文或者文献。</p>
+<p>　　1）信息、熵以及信息增益的概念</p>
+<p>　　引用香农的话来说，信息是用来消除随机不确定性的东西。当然这句话虽然经典，但是还是很难去搞明白这种东西到底是个什么样，可能在不同的地方来说，指的东西又不一样。对于机器学习中的决策树而言，如果带分类的事物集合可以划分为多个类别当中.熵是用来度量不确定性的，当熵越大，X=xi的不确定性越大，反之越小。对于机器学习中的分类问题而言，熵越大即这个类别的不确定性更大，反之越小。</p>
+<p>　　信息增益在决策树算法中是用来选择特征的指标，信息增益越大，则这个特征的选择性越好。</p>
+<p>　　2）决策树</p>
+<p>　　决策树是一种树形结构，其中每个内部节点表示一个属性上的测试，每个分支代表一个测试输出，每个叶节点代表一种类别。常见的决策树算法有C4.5、ID3和CART。</p>
+<p>　　3）集成学习　</p>
+<p>　　集成学习通过建立几个模型组合的来解决单一预测问题。它的工作原理是生成多个分类器/模型，各自独立地学习和作出预测。这些预测最后结合成单预测，因此优于任何一个单分类的做出预测。</p>
+<p>　　随机森林是集成学习的一个子类，它依靠于决策树的投票选择来决定最后的分类结果。</p>
+<h1 id="三-随机森林"><a href="#三-随机森林" class="headerlink" title="三 随机森林"></a>三 随机森林</h1><h2 id="3-1-样本抽样"><a href="#3-1-样本抽样" class="headerlink" title="3.1 样本抽样"></a>3.1 样本抽样</h2><p>随机森林在构建过程中，假设训练集大小为N，其抽样方法为 随机有放回的抽样 大小为n的训练子集作为每棵树的的训练集。怎么来理解随机有放回的抽样呢？</p>
+<p>随机：需要反过来看待，即如果不是随机的，那随机森林中所有的树最后都是一样的，那就没必要使用集成学习了。</p>
+<p>有放回：预测的最终结果是将对所有森林中的树的预测结果进行比较，选择类别较大的作为最终结果。在这个选择过程中，就需要有共性的信息才能有选择，这就要求训练集中存在着共性。</p>
+<h2 id="3-2-特征确定"><a href="#3-2-特征确定" class="headerlink" title="3.2 特征确定"></a>3.2 特征确定</h2><p>对于训练集，都有相同的特征树M，现在需要确定一个值m&lt;&lt;M,这个m值的确定方式有 logN，N/3，sqrtN，N四种类型。每次树进行分裂时，从这m个特征中选择最优的；</p>
+<p>m值的影响：如果m值偏大，导致树的相关性和分类能力会增大；m值偏小时，会导致树的相关性和分类能力减小。</p>
+<p>m值的确定：使用袋外错误率来评估。袋外错误率的定义：在选择n个训练集得到一棵树后，在利用剩余的训练集作为测试集，计算分类错误率，即为袋外错误率。在这个过程中，需要大量的计算K折交叉验证。</p>
+<h2 id="3-3-特点"><a href="#3-3-特点" class="headerlink" title="3.3 特点"></a>3.3 特点</h2><ol>
+<li><p>能够运用在数据集上</p>
+</li>
+<li><p>能够处理高纬度样本数据，不需要降维</p>
+</li>
+<li><p>能够评估特格特征的重要程度</p>
+</li>
+<li><p>对缺失值不太敏感</p>
+</li>
+</ol>
+<h2 id="3-4-算法的选择"><a href="#3-4-算法的选择" class="headerlink" title="3.4 算法的选择"></a>3.4 算法的选择</h2><p>常见的决策树算法有C4.5、ID3和CART(分类回归树)</p>
+<p>参数</p>
+<p>max_features: 单个决策树的最大特征量</p>
+<p>n_estimators: 建立子树的数量</p>
+<p>min_sample_leaf:最小叶子节点数量</p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">lotusct</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2017/11/18/please-love/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+    <div id="uyan_frame"></div>
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1966422"></script>
+
+
+
+
+
+
+
+
+    </div>
 
 
 
