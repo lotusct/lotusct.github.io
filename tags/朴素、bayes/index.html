@@ -26,7 +26,7 @@
     <!--Title-->
 
 
-<title>老树</title>
+<title>标签: 朴素、bayes | 老树</title>
 
 
     <link rel="alternate" href="/atom.xml" title="老树" type="application/atom+xml">
@@ -118,58 +118,43 @@
         <div class="container">
             <div class="row">
                 <main class="col-md-8 main-content ">
-                    <div class="carousel">
-    <%- image_tag('img/head-img.jpg') %>
-</div>
+                    <h3> 
 
-<% if(page.posts && page.posts.length){ %>
-<% page.posts.forEach(function (post, i) { %>
-<%
-    var urls = pickImgs(post);
-    var random = Math.floor(Math.random() * (urls.length));
-    if(theme.defaultImgs && theme.defaultImgs.length >0){
-        var urls2 = theme.defaultImgs;
-        var random2 = Math.floor(Math.random() * (urls2.length));
-    }
-    var _photoUrl = post.img || (urls.length > 0 && urls[random]) || (urls2.length > 0 && urls2[random2]) || '';
-%>
-<article class="post">
-    <% if(_photoUrl) {%>
-        <div class="post-media">
-            <a href="javascript:">
-                <img class="img-ajax" src="<%- url_for('/img/loading.gif') %>"  data-src="<%- url_for(_photoUrl) %>"   alt="<%- post.title %>"> 
-            </a>
-        </div>
-    <% } %>
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="<%- url_for(post.path) %>"><%- post.title %></a>
-            </h1>
-            <div class="post-meta">  &bull;
-                <time class="post-date" datetime="" title="">
-                    <%- date(post.date,"YYYY年MM月DD日") %>
-                </time>
+    朴素、bayes 
+
+
+</h3>
+
+    <article class="post">
+        
+        <div class="post-content">
+            <div class="post-head home-post-head">
+                <h1 class="post-title"> 
+                    <a href="/2018/05/27/bayes/">朴素贝叶斯分类算法</a>
+                </h1>
+                <div class="post-meta">  &bull;
+                    <time class="post-date" datetime="" title="">
+                        2018年05月27日
+                    </time>
+                </div>
             </div>
-        </div>
-        <p class="brief">
-            <%- truncate(strip_html(post.content), {length: theme.excerptLength || 120, omission: '...'}) %>
-        </p> 
-    </div>
-    <footer class="post-footer clearfix">
-        <div class="pull-left tag-list">
-            <%- partial('_partial/article-meta', {post: post}) %>
-        </div>
+            <p class="brief">
+                一 理解
+在我的理解中，朴素贝叶斯比较简单，但却又不知道该如何表达这种简单之处，所以就一直思考通过某种方式出来。
 
-        <div class="post-permalink"> 
-            <a href="<%- url_for(post.path) %>" class="btn btn-default">阅读全文</a>
+朴素：本意是简朴、不奢侈。在此则表示外在条件简单，如要求所有的特征之间是相互独立的。
+贝叶斯：顾名思义，就是通过贝叶斯...
+            </p> 
         </div>
-    </footer>
-</article>
-<% }) %>
-<%}%>
+    </article>
+ 
 
-<%- partial('_partial/pagination') %>
+
+
+
+
+
+
                 </main>
                 
     <aside class="col-md-4 sidebar">

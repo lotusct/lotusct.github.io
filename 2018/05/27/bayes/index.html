@@ -26,7 +26,7 @@
     <!--Title-->
 
 
-<title>老树</title>
+<title>朴素贝叶斯分类算法 | 老树</title>
 
 
     <link rel="alternate" href="/atom.xml" title="老树" type="application/atom+xml">
@@ -38,6 +38,8 @@
 
 
 
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css?rev=9.12.0">
 
 
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
@@ -117,59 +119,111 @@
     <section class="content-wrap">
         <div class="container">
             <div class="row">
-                <main class="col-md-8 main-content ">
-                    <div class="carousel">
-    <%- image_tag('img/head-img.jpg') %>
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="朴素贝叶斯分类算法">
+            
+            朴素贝叶斯分类算法
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>分类算法</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            朴素、bayes
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/05/27</span>
+    </span>
 </div>
 
-<% if(page.posts && page.posts.length){ %>
-<% page.posts.forEach(function (post, i) { %>
-<%
-    var urls = pickImgs(post);
-    var random = Math.floor(Math.random() * (urls.length));
-    if(theme.defaultImgs && theme.defaultImgs.length >0){
-        var urls2 = theme.defaultImgs;
-        var random2 = Math.floor(Math.random() * (urls2.length));
-    }
-    var _photoUrl = post.img || (urls.length > 0 && urls[random]) || (urls2.length > 0 && urls2[random2]) || '';
-%>
-<article class="post">
-    <% if(_photoUrl) {%>
-        <div class="post-media">
-            <a href="javascript:">
-                <img class="img-ajax" src="<%- url_for('/img/loading.gif') %>"  data-src="<%- url_for(_photoUrl) %>"   alt="<%- post.title %>"> 
-            </a>
-        </div>
-    <% } %>
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="<%- url_for(post.path) %>"><%- post.title %></a>
-            </h1>
-            <div class="post-meta">  &bull;
-                <time class="post-date" datetime="" title="">
-                    <%- date(post.date,"YYYY年MM月DD日") %>
-                </time>
-            </div>
-        </div>
-        <p class="brief">
-            <%- truncate(strip_html(post.content), {length: theme.excerptLength || 120, omission: '...'}) %>
-        </p> 
+            
+            
     </div>
-    <footer class="post-footer clearfix">
-        <div class="pull-left tag-list">
-            <%- partial('_partial/article-meta', {post: post}) %>
-        </div>
+    
+    <div class="post-body post-content">
+        <h1 id="一-理解"><a href="#一-理解" class="headerlink" title="一 理解"></a>一 理解</h1><blockquote>
+<p>在我的理解中，朴素贝叶斯比较简单，但却又不知道该如何表达这种简单之处，所以就一直思考通过某种方式出来。</p>
+</blockquote>
+<p>朴素：本意是简朴、不奢侈。在此则表示外在条件简单，如要求所有的特征之间是相互独立的。</p>
+<p>贝叶斯：顾名思义，就是通过贝叶斯定理来进行分类。</p>
+<h1 id="二-原理"><a href="#二-原理" class="headerlink" title="二 原理"></a>二 原理</h1><p>朴素贝叶斯分类算法的核心就是贝叶斯定理，理解了贝叶斯理解，算法就自然而然理解了。</p>
+<p><strong>第一步</strong>：首先从贝叶斯公式开始理解。</p>
+<pre><code>P(B|A) = P(A|B) P(B)/ P(A)  =&gt;  P(分类|特征) = P(特征|分类) P(分类)/ P(特征)
+</code></pre><p>通过条件概率公式求得分类结果。</p>
+<p><strong>第二步</strong>：将朴素概念加入到贝叶斯中去。特征之间相互独立</p>
+<pre><code>P(A|B) = P(A1|B) P(A2|B) P(A3|B) P(A4|B)  ......  P(An|B)
+</code></pre><p>这个公式可以通过训练数据求得概率，又涉及到中心极限定理：频率=概率</p>
+<p><strong>第三步</strong>：在求得各个概率后，带入到上式中，既可以求得概率，如果大于0.5，即属于该分类，反正属于反分类。</p>
+<h1 id="三-总结"><a href="#三-总结" class="headerlink" title="三 总结"></a>三 总结</h1><p>整个过程计算简单、逻辑易于理解，算法的开销也相对较低；</p>
+<p>引入了朴素概念，在现实中各个特征之间相互独立往往不是成立的，如果特征之间关联较大，分类效果不好；</p>
+<pre><code>from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
 
-        <div class="post-permalink"> 
-            <a href="<%- url_for(post.path) %>" class="btn btn-default">阅读全文</a>
+def bayes_classify(features_train, labels_train, features_test, labels_test):
+    x = features_train
+    y = labels_train
+    clf = GaussianNB()
+    clf.fit(x, y)
+    pred = clf.predict(features_test)
+    return accuracy_score(labels_test, pred)
+</code></pre>
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">lotusct</a>
+            
         </div>
-    </footer>
+        <div>
+            
+        </div>  
+    </div>
 </article>
-<% }) %>
-<%}%>
 
-<%- partial('_partial/pagination') %>
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2018/05/26/baggingAndBoosting/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+    <div id="uyan_frame"></div>
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1966422"></script>
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
                 </main>
                 
     <aside class="col-md-4 sidebar">
