@@ -26,7 +26,7 @@
     <!--Title-->
 
 
-<title>标签: 若遇爱 好好爱 | 老树</title>
+<title>异常检测Isolation Forest | 老树</title>
 
 
     <link rel="alternate" href="/atom.xml" title="老树" type="application/atom+xml">
@@ -38,6 +38,8 @@
 
 
 
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css?rev=9.12.0">
 
 
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
@@ -117,36 +119,114 @@
     <section class="content-wrap">
         <div class="container">
             <div class="row">
-                <main class="col-md-8 main-content ">
-                    <h3> 
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="异常检测Isolation Forest">
+            
+            异常检测Isolation Forest
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>异常检测算法</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            异常、检测、Isolation Forest、iTree
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/06/03</span>
+    </span>
+</div>
 
-    若遇爱 好好爱 
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <h1 id="一、目的"><a href="#一、目的" class="headerlink" title="一、目的"></a>一、目的</h1><p>挖掘异常数据，在线异常检测。算法来源08年的一篇论文《Isolation Forest》(<a href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf)，由南京大学周志华教授和澳大利亚莫纳什大学的两位教授Fei" target="_blank" rel="noopener">https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf)，由南京大学周志华教授和澳大利亚莫纳什大学的两位教授Fei</a> Tony Liu, Kai Ming Ting三人共同完成。在2011年又发表了《Isolation-based Anomaly Detection》(<a href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/tkdd11.pdf)。" target="_blank" rel="noopener">https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/tkdd11.pdf)。</a></p>
+<p>算法基础主要是异常数据的两个特征：1）异常数据只占很少量   2）异常数据特征值和正常数据差别很大。因此，构建二叉树型结构的时候，异常数据离根更近，而正常数据离根更远。</p>
+<h1 id="二、算法原理"><a href="#二、算法原理" class="headerlink" title="二、算法原理"></a>二、算法原理</h1><p>与随机森林由大量决策树组成一样，iForest森林也由大量的树组成。iForest中的树叫isolation tree，简称iTree。iTree树和决策树不太一样，其构建过程也比决策树简单，因为其中就是一个完全随机的过程。具体步骤：</p>
+<ol>
+<li>假设数据集有N条数据，构建一颗iTree时，从N条数据中均匀抽样(一般是无放回抽样)出ψ个样本出来，作为这颗树的训练样本；</li>
+<li>在样本中，随机选一个特征，并在这个特征的所有值范围内(最小值与最大值之间)随机选一个值，对样本进行二叉划分，将样本中小于该值的划分到节点的左边，大于等于该值的划分到节点的右边；</li>
+<li>对于左右两边的子树，分别重复步骤2)；</li>
+<li>直到达到终止条件。终止条件：1.一个数据不能再分了(即只剩下一个数据，或者剩下数据都相同)；2. 树的高度达到log2(ψ)。<br><strong>注：log2(ψ)值近似于树的平均深度，因为只需要关注低于平均高度的数据点，而不需要树进行完全生成。</strong></li>
+<li>构建完所有的iTree树，使用测试集进行测试。测试过程：把测试数据在iTree树上沿对应的条件分支往下走，直到达到叶子节点，并记录这过程中经过的路径长度h(x)—所走过的边的数量。<strong>注：iTree能有效检测异常的假设是：异常点一般都是非常稀有的，在iTree中会很快被划分到叶子节点。</strong></li>
+<li><p>计算每条待测数据的异常分数(Anomaly Score)。公式</p>
+<pre><code>S(x,n)=2的指数(-(h(x)/c(n))
+c(n)=2H(n−1)−(2(n−1)/n)
+其中H(k)=ln(k)+ξ，ξ=0.5772156649为欧拉常数
+</code></pre></li>
+</ol>
+<p>s(x,n)就是记录x在由n个样本的训练数据构成的iTree的异常指数，s(x,n)取值范围为[0,1]。欧拉常数值为0.5772156649，对于s(x,n)：</p>
+<pre><code>1) 如果分数越接近1，其是异常点的可能性越高；
+2) 如果分数都比0.5要小，那么基本可以确定为正常数据；
+3) 如果所有分数都在0.5附近，那么数据不包含明显的异常样本。
+</code></pre><h1 id="三、算法分析"><a href="#三、算法分析" class="headerlink" title="三、算法分析"></a>三、算法分析</h1><p>1.算法特点。本算法的特点区别现有算法在于：现有算法主要是基于正常数据构建数据模型，将不符合该模型的数据定义为异常数据。而本算法不需要对正常的数据构建模型，能够快速的找出异常数据。</p>
+<p>2.高维度数据。如特征包含多个维度，算法不能将所有的属性都用上，此时需要选择有价值的属性，使用峰度系数Kurtosis来选择。</p>
+<p>3.算法参数设置</p>
+<p>1）树的多少。实验发现，在100颗树的时候，路径的长度就已经覆盖得比较好了，因此选100颗足够。</p>
+<p>2）采样的多少。采样，是为了更好的将正常数据和异常数据分离开来。有别于其它模型，采样数据越多，反面会降低iForest识别异常数据的能力。因为，通常使用256个样本。</p>
+<p>4.算法优势</p>
+<p>1）算法对内存要求很低，且处理速度很快，其时间复杂度也是线性的；</p>
+<p>2） 处理高维数据和大数据，可以在线预测；</p>
+<p>3）iForest既能发现群异常数据，也能发现散点异常数据。同时也能处理训练数据中不包含异常数据的情况。</p>
+<h1 id="四、算法实现"><a href="#四、算法实现" class="headerlink" title="四、算法实现"></a>四、算法实现</h1><p>算法的实现是基于python下的  scikit-learn  算法包直接 from sklearn.ensemble import IsolationForest 导入，具体的参数配置：</p>
+<p>n_estimators: 默认为100，配置iTree树的多少</p>
+<p>max_samples: 默认为265，配置采样大小</p>
+<p>max_features: 默认为全部特征，对高维数据，可以只选取部分特征</p>
+<p>Java算法实现 <a href="https://github.com/JeemyJohn/AnomalyDetection" target="_blank" rel="noopener">https://github.com/JeemyJohn/AnomalyDetection</a></p>
 
+    </div>
 
-</h3>
-
-    <article class="post">
-        
-        <div class="post-content">
-            <div class="post-head home-post-head">
-                <h1 class="post-title"> 
-                    <a href="/2017/11/18/pleaseLove/">若遇爱,请好好爱</a>
-                </h1>
-                <div class="post-meta">  &bull;
-                    <time class="post-date" datetime="" title="">
-                        2017年11月18日
-                    </time>
-                </div>
-            </div>
-            <p class="brief">
-                文 / 树儿我们都是尘世中一朵寂寞的烟火。与无涯的岁月里，透视着人间百态的繁复。也成全着生命中必然的遇见。也许，时光的两岸，唯有不辜负光阴，不违背心意，就是安稳与静好的妥帖。
-只一个转身，便已踏进冬的门楣。我从一卷遗落的风声里，看忘川...
-            </p> 
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">lotusct</a>
+            
         </div>
-    </article>
- 
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2018/05/27/bayes/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
 
 
+    <div id="comments">
+        
+    <div id="uyan_frame"></div>
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1966422"></script>
+
+
+
+
+
+
+
+
+    </div>
 
 
 
